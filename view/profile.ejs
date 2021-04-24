@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <link href="css/stylesheet.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+        <script src="JavaScript/script.js"></script>
+        <link href="css/calendar.css" rel="stylesheet">
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+              integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+                integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+                integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+        <script defer src="JavaScript/calendar.js"></script>
+        <title>Trinity Innovation Hub</title>
+    </head>
+
+    <body class="flex-wrapper">
+        <!-- NAVIGATION BAR START -->
+        <%- include("nav", {active: "Home" }) %>
+        <!-- NAVIGATION BAR END-->
+        <!-- PROFILE START -->
+
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-8 profile">
+                    <h1 class="justify-content-center profileTitle"> Profile </h1><br>
+                    <div class="row ">
+                        <div class="col-md-1">
+                        </div>
+                        <div class="col-md-3">
+                            
+                        </div>
+                        <div class="col-md-8">
+                            <ul class="justify-content-center" id="profile">
+                                <li id="username">Username: &#8287 <%= sessionUsername %></li><br>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                </div>
+            </div><br>
+            <div class="row">
+                <h1 class="justify-content-center profileTitle2">Booking table</h1>
+            </div><br>
+            <div class="row">
+                <div class="col-2"></div>
+                <div class="col-8">
+                    <div class="justify-content-center" id="containerCalendar">
+                        <div id="header">
+                            <div id="monthDisplay"></div>
+                            <div>
+                                <button id="backButton">Back</button>
+                                <button id="nextButton">Next</button>
+                            </div>
+                        </div>
+                        <!-- CALENDER START -->
+                        <div id="calendar"></div>
+
+                        <div id="newEventModal">
+                            <p id="bookingMessage">New booking</p>
+                            <a id="Message"></a>
+                            <select class="mr-2" id="roomsInput">
+                            </select>
+                            <div class="row ml-2">
+                                <button class="mr-1" id="saveButton">Confirm</button>
+                                <button  id="cancelButton">Cancel</button>
+                            </div>
+                        </div>
+
+                        <div id="deleteEventModal">
+                            <h2>Event</h2>
+
+                            <p id="eventText"></p>
+
+                            <button id="deleteButton">Delete</button>
+                            <button id="closeButton">Close</button>
+                        </div>
+
+                        <div id="modalBackDrop"></div>
+                    </div>
+                    <div class="col-2"></div>
+                    <!-- CALENDER END -->
+                </div>
+            </div>
+        </div><br>
+        <!-- PROFILE END -->
+        <%- include ("footer")%>
+    </body>
+
+</html>

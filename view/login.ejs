@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <link href="css/stylesheet.css" rel="stylesheet">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="JavaScript/script.js"></script>
+        <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <title>Trinity Innovation Hub</title>
+    </head>
+
+    <body class="flex-wrapper">
+        <!-- NAVIGATION BAR START -->
+        <%- include("nav", {active: "Home"}) %>
+        <!-- NAVIGATION BAR END-->
+
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <!-- LOGIN FORM START -->
+                    <form id="login-form" action="/login" method="post">
+                        <div class="text-center">
+                            <h2 class="modal-title w-100 font-weight-bold">Login</h2>
+                        </div><br>
+                        <%if(messages.errorLogin){%>
+                            <div class="alert alert-danger">
+                                <%=messages.errorLogin%>
+                            </div>
+                        <%}else{%>
+                            <br>
+                        <%}%>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-envelope prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="loginusername">Username</label>
+                            <input type="text" id="loginusername" name="loginusername" class="form-control validate">
+                        </div>
+
+                        <div class="md-form mb-4">
+                            <i class="fas fa-lock prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="loginpassword">Password</label>
+                            <input type="password" id="loginpassword" name = "loginpassword" class="form-control validate">
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-default">Login</button>
+                        </div>
+                    </form>
+                    <!-- LOGIN FORM END -->
+                </div>
+                <div class="col">
+                    <!--SIGNUP FORM START-->
+                    <form id="signup-form" action="/signup" method="post">
+                        <div class="text-center">
+                            <h2 class="modal-title w-100 font-weight-bold">Sign up</h2>
+                        </div><br>
+                        <%if(messages.errorSignup){%>
+                            <div class="alert alert-danger">
+                                <%=messages.errorSignup%>
+                            </div>
+                        <%}else if(messages.successSignup){%>
+                            <div class="alert alert-success">
+                                <%=messages.successSignup%>
+                            </div>
+                        <%}%>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-user prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="signupusername">Username</label>
+                            <input type="text" id="username" name="signupusername" class="form-control validate">
+                        </div>
+                        <div class="md-form mb-5">
+                            <i class="fas fa-envelope prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="email">Your email</label>
+                            <input type="email" id="email" name="email" class="form-control validate">
+                        </div>
+
+                        <div class="md-form mb-4">
+                            <i class="fas fa-lock prefix grey-text"></i>
+                            <label data-error="wrong" data-success="right" for="password">Your password</label>
+                            <input type="password" id="password" name="password" class="form-control validate">
+                        </div>
+                        <div class="text-center">
+                            <button class="btn btn-deep-orange" type="submit" >Sign up</button>
+                        </div>
+                    </form>
+                     <!-- SIGNUP form END -->
+                </div>
+            </div>
+        </div>
+        <%- include ("footer")%>
+    </body>
+
+</html>

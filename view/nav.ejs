@@ -1,0 +1,50 @@
+<!-- NAVIGATION START -->
+<script src="JavaScript/script.js"></script>
+<a class="tcd-skip" href="#maincontent">Skip to main content</a>
+
+<nav class="navbar navbar-expand-md navbar-light " style="background-color:transparent">
+    <img class="navbar-brand d-flex mr-auto tcdLogo" src="Trinity_Main_Logo.svg" alt="Trinity Logo">
+    <div class="w-20"></div>
+    <a class="navbar-toggler collapsed" href="#" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+    </a>
+    <div class="navbar-collapse collapse w-100" id="navbarSupportedContent">
+        <ul class="navbar-nav w-100 justify-content-center text-nowrap">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/coffee">Coffee Shop</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/gym">Gym</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " href="/events">Events</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">Booking</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="/contact">Contact</a>
+            </li>
+        </ul>
+        <ul class="nav navbar-nav ml-auto w-100 justify-content-end">
+            <li class="nav-item">
+                <div class="btn-group-vertical" role="group" aria-label="First Group">
+                    <% if(typeof sessionUsername!=='undfeined'&&sessionUsername!=null){%>
+                        <a href="/logout" class="btn btn-sm bgColor " role="button">Logout</a>
+                        <a href="/profile" class="btn btn-sm bgColor mt-1" role="button">profile</a>
+                        <%}else{%>
+                            <a class="btn btn-sm bgColor mb-1" href="/login" role="button">Login</a>
+                            <%}%>
+                </div>
+            </li>
+        </ul>
+    </div>
+</nav><br>
+
+<!-- NAVIGATION END-->
+
+<main role="main" id="maincontent">
+</main>
