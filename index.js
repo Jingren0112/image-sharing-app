@@ -1,3 +1,4 @@
+
 /*module define */
 var express = require('express');
 var mysql = require('mysql');
@@ -35,7 +36,7 @@ console.log("App running on http://localhost:"+port);
 
 /*route handling method */
 app.route("/").get(function(req,res){
-        res.render('index.ejs',{sessionUsername: req.session.Username});
+        res.render('index.ejs',{sessionUsername: req.session.username});
     });
   
 app.route('/login')
@@ -79,15 +80,23 @@ app.route('/signup')
 
 app.route('/profile')
     .get(function(req,res){
-        res.render('profile.ejs',{"sessionUsername":req.session.username});
+        if(req.session.username){
+            res.render('profile.ejs',{"sessionUsername":req.session.username});
+        } else{
+            res.redirect('/login');
+        }
     })
-    .post(function(req,res){
-
-    });
 
 app.route('/upload')
     .post(function(req,res){
+        var image = req.body;
+        image = image.data;
+        image = JSON.parse(image);
+        /*here is the part to combine time with it*/
 
+        image = JSON.stringify(image);
+        res.send(image);
+           
     });
 
 app.route('/like')
@@ -99,3 +108,5 @@ app.route('/comment')
     .post(function(req,res){
 
     });
+
+   
