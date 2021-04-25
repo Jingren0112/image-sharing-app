@@ -1,21 +1,3 @@
-/* heading font style*/
-
-h1 {
-    font-family: Source Sans Pro;
-    font-style: normal;
-    font-weight: bold !important;
-    display: flex;
-    align-items: center;
-    color: #0071BD !important;
-}
-
-h2 {
-    font-family: Source Sans Pro;
-    font-style: normal;
-    font-weight: blod;
-    display: flex;
-    color: #9590A0 !important;
-}
 
 
 /*body style to keep footer on the bottom*/
@@ -30,14 +12,6 @@ h2 {
 
 /* paragraph style*/
 
-p {
-    font-size: 20px;
-    line-height: 30px;
-    display: flex;
-    align-items: center;
-}
-
-
 /*stylesheet for navigation brand*/
 
 .navbar {
@@ -46,7 +20,7 @@ p {
 }
 
 .tcdLogo {
-    width: 20%;
+    width: 10%;
 }
 
 .w-20 {
@@ -123,19 +97,6 @@ p {
 }
 
 
-/* style for menu on coffee*/
-
-.menu {
-    background-color: #0071BD;
-    border-radius: 25px;
-    color: white;
-    padding-left: 100px;
-    padding-right: 100px;
-    padding-top: 20px;
-    text-align: center;
-}
-
-
 /*style sheet for all of buttons */
 
 .bgColor {
@@ -143,127 +104,6 @@ p {
     background-color: #0071BD !important;
 }
 
-
-/*style sheet for video and image */
-
-.medialink {
-    text-align: center;
-}
-
-.mainImage {
-    width: 50% !important;
-}
-
-
-/*stylesheet for contact page */
-
-.contact {
-    display: flex;
-    margin-top: 5%;
-    align-items: center;
-    justify-content: center;
-}
-
-.contact_left {
-    width: 530px;
-    height: 656.51px;
-    margin-left: 70px;
-    border-radius: 20px;
-    background: #0071bd;
-}
-
-.contact_right {
-    width: 937.71px;
-    height: 499.5px;
-    margin-left: 100px;
-    background: url("../contact.jpg") no-repeat;
-    background-size: auto 75%;
-}
-
-.contact_left>p {
-    display: block;
-    width: 100%;
-    margin-top: 30px;
-    font-size: 64px;
-    font-weight: 400;
-    font-style: normal;
-    line-height: 80px;
-    text-align: center;
-    text-align: center;
-    color: #fff;
-}
-
-.contact_name,
-.contact_message {
-    position: relative;
-    margin-top: 100px;
-    padding: 0 40px;
-    font-size: 24px;
-    font-weight: 600;
-    font-style: normal;
-    line-height: 30px;
-    text-align: left;
-    letter-spacing: 0;
-    color: #fff;
-}
-
-.contact_message {
-    margin-top: 50px;
-}
-
-.contact_name>p {
-    margin: 0;
-}
-
-.input_name,
-.area_message {
-    width: 100%;
-    padding-right: 20px;
-    border: none;
-    border-bottom: 3px solid #fff;
-    color: #fff;
-    background: none;
-    resize: none;
-}
-
-.area_message {
-    overflow: hidden;
-    height: 130px;
-    line-height: 70px;
-}
-
-.area_message_line {
-    position: absolute;
-    top: 100px;
-    right: 0;
-    left: 0;
-    width: calc(100% - 80px);
-    height: 3px;
-    margin: 0 auto;
-    background: #fff;
-}
-
-input:focus,
-textarea:focus,
-button:focus {
-    outline: none;
-}
-
-.contact_button {
-    width: 117px;
-    height: 30px;
-    margin-top: 40px;
-    margin-left: 40px;
-    font-size: 14px;
-    font-weight: 900;
-    line-height: 18px;
-    text-align: center;
-    letter-spacing: 0;
-    color: #0071bd;
-    border-radius: 4px;
-    background: #fff;
-    box-shadow: 1px 5px 10px rgba(0, 0, 0, .3);
-}
 
 
 /*profile style*/
@@ -285,10 +125,6 @@ h1.profileTitle {
     font-size: 20px;
 }
 
-.avatar {
-    width: 100px;
-    height: 100px;
-}
 
 
 /*file select button style*/
@@ -302,7 +138,24 @@ h1.profileTitle {
     left: 6%;
 }
 
+/*image upload style*/
+.image-upload >input{
+    display:none;
+  }
 
+.labelForUpload{
+    margin-bottom: 20%;
+}
+
+.uploadButton{
+    margin-left:20;
+    color:white;
+    background:#0071BD;
+}
+
+.hide{
+    display:none;
+}
 /*table style*/
 
 h1.profileTitle2 {
@@ -311,63 +164,9 @@ h1.profileTitle2 {
 }
 
 
-/*footer style*/
 
-.footerText {
-    color: white;
-}
+/*login/signup form*/
 
-.addressText {
-    margin-left: 8%;
-}
-
-.footerLogoSet {
-    margin-top: 5%;
-    width: 6%;
-}
-
-.footerLogo {
-    margin-left: 5%;
-}
-
-.tcd-logo-foot {
-    margin-top: 5%;
-    margin-left: 5%;
-    width: 250px;
-    height: auto;
-}
-
-.ml-6 {
-    margin-left: 5%;
-}
-
-
-/*mobile version */
-
-@media screen and (max-width: 600px) {
-    .contact {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: space-between;
-    }
-    .contact_left {
-        width: 450px;
-        height: 656.51px;
-        margin-right: 70px;
-        border-radius: 20px;
-        background: #0071bd;
-    }
-    .contact_right {
-        width: auto;
-        height: auto;
-        background: url("../contact.jpg") no-repeat;
-    }
-    .footerText,
-    .addressText {
-        margin: 0 auto;
-    }
-}
 
 #form_label {
     cursor: pointer;
