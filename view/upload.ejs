@@ -13,7 +13,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"crossorigin="anonymous"></script>
         <script src="http://stevenlevithan.com/assets/misc/date.format.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"crossorigin="anonymous"></script>
-        <title>3rd space sharing</title>
+        <title>Upload your image</title>
     </head>
 
     <body >
@@ -22,15 +22,22 @@
         <!-- NAVIGATION BAR END-->
         <!-- PROFILE START -->
 
+            
         <div class="container">
-            <div class="row">
-                <div class="col profile">
-                    <h1 class="justify-content-center profileTitle"> Profile </h1><br>
-                    
-                </div>
-            </div><br>
-            <div class="row">
-                <div class="col">
+            
+            <h1 class="justify-content-center profileTitle mr-3"> Upload </h1><br>
+            <div class="row justify-content-center mr-3">
+                    <div id="messages">
+                    <%if(messages.successUpload){%>
+                        <div class="alert alert-success">
+                            <%=messages.successUpload%>
+                        </div>
+                    <%}else if(messages.failUpload){%>
+                        <div class="alert alert-danger">
+                            <%=messages.failUpload%>
+                        </div>
+                    <%}%>
+                    </div>
                     <form id="uploads" enctype="multipart/form-data">     
                         <div class="image-upload">
                             <label class="uploadButton" for="upload">
@@ -48,7 +55,6 @@
                         <%=messages.errorNoFile%>
                     </div>
                     <% } %>
-                </div>
             </div>
            
         <!-- PROFILE END -->
