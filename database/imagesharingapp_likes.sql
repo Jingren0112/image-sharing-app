@@ -28,7 +28,7 @@ CREATE TABLE `likes` (
   `idimages` int NOT NULL,
   PRIMARY KEY (`idlikes`),
   UNIQUE KEY `likeKey` (`idusers`,`idimages`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +37,7 @@ CREATE TABLE `likes` (
 
 LOCK TABLES `likes` WRITE;
 /*!40000 ALTER TABLE `likes` DISABLE KEYS */;
-INSERT INTO `likes` VALUES (1,1,1),(2,1,2),(3,1,5);
+INSERT INTO `likes` VALUES (1,1,1),(2,2,2);
 /*!40000 ALTER TABLE `likes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-28  9:54:54
+-- Dump completed on 2021-04-28 23:26:33

@@ -26,12 +26,13 @@ CREATE TABLE `comments` (
   `idcomments` int NOT NULL AUTO_INCREMENT,
   `comment` varchar(45) NOT NULL,
   `idimages` int NOT NULL,
+  `date` varchar(45) DEFAULT NULL,
   `idusers` int NOT NULL,
   PRIMARY KEY (`idcomments`),
   UNIQUE KEY `idcomments_UNIQUE` (`idcomments`),
   KEY `idimages_idx` (`idimages`),
   CONSTRAINT `idimages` FOREIGN KEY (`idimages`) REFERENCES `images` (`idimages`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +41,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,'I love this image!',1,1),(2,'I think they look good!',1,2),(3,'It looks really good',1,1),(4,'Bob again, love this!',1,1),(5,'I really love this one!',1,1),(6,'first to comment!',2,1),(7,'Here to comment!',8,1);
+INSERT INTO `comments` VALUES (1,'I love this!',1,'2021-04-28 21:17:49',1),(2,'like this!',1,'2021-04-28 21:19:37',2),(3,'Looks good!',2,'2021-04-28 21:26:10',1),(4,'Looks really nice',2,'2021-04-28 21:28:53',1),(5,'I love this!',2,'2021-04-28 21:29:31',1),(6,'Test comment!',2,'2021-04-28 22:31:50',1),(7,'I\'m testing!',2,'2021-04-28 22:37:27',1),(8,'helping test!',2,'2021-04-28 22:38:33',2);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +54,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2021-04-28  9:54:54
+-- Dump completed on 2021-04-28 23:26:33
