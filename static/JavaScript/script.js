@@ -9,6 +9,10 @@ function imageUpload(e){
         setReader(e.target.files[i]);
         imageName[i] = e.target.files[i].name;
         var img=document.createElement("IMG");
+        var deleteImages = document.createElement("BUTTON");
+        deleteImages.classList.add("btn");
+        deleteImages.classList.add("btn-sm");
+        deleteImages.classList.add("bgColor");
         img.src=URL.createObjectURL(e.target.files[i]);
         img.classList.add("col-3");
         document.getElementById("preview").appendChild(img);
@@ -16,47 +20,72 @@ function imageUpload(e){
  
 }
 
-function loadImages(){
+function like(){
+    var idimages = document.getElementsByClassName("image")[0].id;
+    var dataToTransfer = {"idimages":idimages};
     $.ajax({
-        url:"/getImages",
+        url:"/like",
         type:"POST",
-        data: null
+        data: dataToTransfer
     }).done(function(result){
-        if(result!=null){
-            for(var i=0; i<result.length; i++){
-                if(i%4==0&&i!=0){
-                    document.getElementById("imageset").appendChild(document.createElement("br"));
-                    document.getElementById("imageset").appendChild(document.createElement("br"));
-                }
-                var username = result[i].username;
-                var imageBlock = document.createElement("DIV");
-                imageBlock.classList.add("col-3");
-                var img=document.createElement("IMG");
-                var date = document.createElement("a");
-                var username = document.createElement("a");
-                img.src=result[i].src;
-                date.innerHTML= result[i].date;
-                username.innerHTML=result[i].username;
-                imageBlock.appendChild(username);
-                imageBlock.appendChild(date);
-                imageBlock.appendChild(img);
-                document.getElementById("imageset").appendChild(imageBlock);
-            }
+        if(result=="failed"){
+            window.location.href='/login';
+        }else{
+            document.getElementById("likebtn").disabled = true;
+            var currentValue=document.getElementById("count").innerHTML;
+            console.log(currentValue);
+            document.getElementById("count").innerHTML = parseInt(currentValue,10)+1;
         }
     });
 }
 
+function comment(){
+    var data=document.getElementById("commentInput");
+    var idimages = document.getElementsByClassName("image")[0].id;
+    var dataToTransfer={"data":data.value,"idimages":idimages};
+    $.ajax({
+        url:"/comment",
+        type:"POST",
+        data: dataToTransfer
+    }).done(function(result){
+        if(result=="failed"){
+            window.location.href='/login';
+        }else{
+            var comment=document.createElement("div");
+            comment.classList.add("row");
+            comment.classList.add("justify-content-center");
+            var commentData=document.createElement("p");
+            commentData.innerHTML="Comment: "+result.comment;
+            comment.appendChild(commentData);
+            var commentUser=document.createElement("div");
+            commentUser.classList.add("row");
+            commentUser.classList.add("justify-content-center");
+            var commentUsername=document.createElement("p");
+            commentUsername.innerHTML="From "+result.username;
+            commentUser.appendChild(commentUsername);
+            var area = document.getElementById("commentArea");
+            if(document.getElementById("nocomment")!=null){
+                area.innerHTML="";
+            }
+            area.appendChild(comment);
+            area.appendChild(commentUser);
+        }
+    });
+}
+
+
 function send(){
-    console.log(dataTrans);
     var data ={"data": JSON.stringify(dataTrans),"imageName":JSON.stringify(imageName)};
     $.ajax({
         url:"/upload",
         type: "POST",
         data: data
-    }).done(function(result){
+    }).done(function(){
             window.location.reload();
     });
 }
+
+
 function setReader(file){
     const reader = new FileReader();
     reader.onload=function(){
@@ -66,6 +95,10 @@ function setReader(file){
     reader.readAsDataURL(file);
 }
 
+
+function deleteImages(e){
+
+}
 
 var imageName = [];
 var data=[];
