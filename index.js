@@ -2,12 +2,12 @@
 /*module define */
 var express = require('express');
 var mysql = require('mysql');
-var flash = require('express-flash');
+var flash = require('express-flash');           //flash error/success
 var session = require('express-session');
 var bodyParser = require('body-parser');
 var fileUpload = require('express-fileupload');
-var fs = require('fs');
-var async = require('async');
+var fs = require('fs');                         //file write
+var async = require('async');                   //async for async loop
 const {complie} = require('ejs');
 var port = 8000;
 var app = express();
@@ -17,7 +17,7 @@ var con = mysql.createConnection({
     password:'12345678',
     database:'imagesharingapp',
     port:3306,
-    multipleStatements:true,
+    multipleStatements:true,                    //allow multiple statements
 });
 
 /*module initialization */
@@ -29,14 +29,16 @@ app.use(session({
     secret:'c9fab6de6998e720216099b5871209b9588cea69',
     resave:false,
     saveUninitialized:true,
-    cookie:{maxAge:60000}
+    cookie:{maxAge:6000000}                                   //set cookie expire time for 100 mins: 1000*60*100
 }))
 app.use(flash());
 app.set("view_engine","ejs");
 app.set("views","view");
 app.listen(port);
 console.log("App running on http://localhost:"+port);
-var previousRoute='/';
+
+var previousRoute='/';          //Global variable to check previous route for login route
+
 /*route handling method */
 app.route("/")
     .get(function(req,res){
@@ -45,19 +47,18 @@ app.route("/")
                 throw err;
             }
             res.render('index.ejs',{
-                sessionUsername: req.session.username,
-                images: result
+                sessionUsername: req.session.username,  //this might be undefined but if undefined, the navigation will display login instead of logout.
+                images: result                          //render home page with the thumbnails of the image with likes, date, publish user. Label each image with image id
             });
         });    
     });
   
 app.route('/login')
-    .get(function(req,res){
-        console.log(req.headers.referer);
-        if(req.headers.referer!='http://localhost:8000/login'&&previousRoute!='/upload'){
+    .get(function(req,res){                             //display login page along with signup
+        if(req.headers.referer!='http://localhost:8000/login'&&previousRoute!='/upload'){               //check if previous route is login, if not then update it. Upload need an extra exception
             previousRoute=req.headers.referer;
         }
-        res.render('login.ejs',{sessionUsername: req.session.username});
+        res.render('login.ejs',{sessionUsername: req.session.username});                                //render login page.
     })
     .post(function(req,res){
         var sql="SELECT username FROM users WHERE username='"+req.body.loginusername+"' AND password='"+req.body.loginpassword+"';";
@@ -65,13 +66,13 @@ app.route('/login')
             if(err){
                 throw err;
             }
-            if(result.length>0){
-                req.session.username = req.body.loginusername;
-                res.redirect(previousRoute);
+            if(result.length>0){                                    //veryfied user. If select return result, it means user with that password exisit in the db
+                req.session.username = req.body.loginusername;      //create session data
+                res.redirect(previousRoute);                        //redirect to previous route to handle whatever user is doing previously. If nothing then redirect to homepage as default.
             }
             else{
-                req.flash("errorLogin","Please enter valid username/password.");
-                res.redirect('/login');
+                req.flash("errorLogin","Please enter valid username/password.");        //flash the login error
+                res.redirect('/login');                                                 //refresh login page to display flash error
             }
         });
     });
@@ -79,28 +80,28 @@ app.route('/login')
 
 app.route('/logout')
     .get(function(req,res){
-        req.session.destroy();
-        res.redirect('/');
+        req.session.destroy();                                  //destory session to revoke login
+        res.redirect('/');                                      //send back to homepage
     });
 
 app.route('/signup')
     .post(function(req,res){
-        if(checkAlphaNumeric(req.body.signupusername)){
+        if(checkAlphaNumeric(req.body.signupusername)){                         //check if username contain special character to prevent sql injection. (ATTACK!)
             con.query("INSERT INTO users(username, password, email) VALUES('"+req.body.signupusername+"','"+req.body.password+"','"+req.body.email+"')",function(err){
                 if(err){
-                    if(err.errno==1062){
-                        req.flash("errorSignup","Username already exisit.");
+                    if(err.errno==1062){                                            //1062 is duplicate key. This means username exist
+                        req.flash("errorSignup","Username already exisit.");        
                         res.redirect('/login');
                     }else{
                         throw err;
                     }
                 }else{
-                    req.flash("successSignup","Signup successfull, please login.");
-                    res.redirect('/login');
+                    req.flash("successSignup","Signup successfull, please login."); //successfully registered and it will flash the success 
+                    res.redirect('/login');                                         //redirect to login for user to login
                 }
             });
         } else{
-            req.flash("errorUsername","Your username should only contain numbers and letters");
+            req.flash("errorUsername","Your username should only contain numbers and letters");     //return error of special character for username.
             res.redirect('/login');
         }
         
@@ -108,53 +109,55 @@ app.route('/signup')
 
 
 app.route('/upload')
-    .get(function(req,res){
-        if(req.session.username){
-            res.render('upload.ejs',{"sessionUsername":req.session.username});
+    .get(function(req,res){                                                         //display login page
+        if(req.session.username){                                                   //if logged in
+            res.render('upload.ejs',{"sessionUsername":req.session.username});      //render upload page
         } else{
-            previousRoute=req.url;
-            res.redirect('/login');
+            previousRoute=req.url;                                                  //not login, manully save previousRoute to upload
+            res.redirect('/login');                                                 //redirect to login page
         }
     })
-    .post(function(req,res){
-        var image = req.body;
-        if(image!=null){
-            var imageData = JSON.parse(image.data);
-            var imageName = JSON.parse(image.imageName);
-            var time = getTime();
+    .post(function(req,res){                                                        //handle upload request from ajax.
+        var image = req.body;                                                       //get info from ajax
+        if(image.data!='[]'){                                                       //check data is not empty
+            var imageData = JSON.parse(image.data);                                 //get image data (base64) array
+            var imageName = JSON.parse(image.imageName);                            //get image name array
+            var time = getTime();                                                   //get current time
             async.forEach(imageData, function(data){
-                var buffer = Buffer.from(data.replace(/^data:image\/\w+;base64,/,""),'base64');
-                fs.writeFileSync('uploads/'+imageName[imageData.indexOf(data)],buffer);
-                var mysql = "INSERT INTO images(src, date, likes, idusers) VALUES ('"+data+"', '"+time+"', 0, (select idusers from users where username='"+req.session.username+"'))";
-                con.query(mysql,function(err){
-                    if(err){
-                        throw err;
-                    }
-                });
+                if(data!=""){                                                                               //check if that image was deleted on client side.
+                    var buffer = Buffer.from(data.replace(/^data:image\/\w+;base64,/,""),'base64');         //convert the base 64 code to buffer
+                    fs.writeFileSync('static/uploads/'+imageName[imageData.indexOf(data)],buffer);          //create local file in upload folder
+                    var mysql = "INSERT INTO images(src, date, likes, idusers) VALUES ('"+data+"', '"+time+"', 0, (select idusers from users where username='"+req.session.username+"'));";
+                    con.query(mysql,function(err){
+                        if(err){
+                            throw err;
+                        }
+                    });
+                } else{                                                             //if deleted, do nothing and go to next image.
+
+                }
             });
-            /*here is the part to combine time with it*/
-            req.flash("successUpload", "You have uploaded your image");
+            req.flash("successUpload", "You have uploaded your image");             //flash success by reloading page
             res.send("You have successfully uploaded your image");
-        }else{
-            req.flash("faildUpload","You didn't select any image!");
+        }else{                                                                      //if empty data
+            req.flash("faildUpload","You didn't select any image!");                //flash error
             res.send("error");
         }
     });
 
-app.route('/:imageID')
+app.route('/getImages/:imageID')                                                    //route for individual image. It was /:imageID but this will cause the homepage to load along with this being execute. That's why it's being changed to this route.
     .get(function(req,res){
-        req.session.imageID=req.params['imageID'];
-        var imageID = req.session.imageID;
+        var imageID = req.params['imageID'];                  //get imageID from the url
         var query1 = "SELECT src, date, likes, username, idimages, users.idusers FROM users JOIN images ON users.idusers=images.idusers WHERE images.idimages="+imageID+"; ";
-        var query2 = "SELECT comment, username FROM comments JOIN users ON users.idusers = comments.idusers WHERE idimages="+imageID+";";
+        var query2 = "SELECT comment, username,date FROM comments JOIN users ON users.idusers = comments.idusers WHERE idimages="+imageID+";";
         var query3 = "SELECT likes.idusers FROM likes JOIN users ON likes.idusers=users.idusers WHERE idimages="+imageID+" AND username='"+req.session.username+"';";
-        con.query(query1+query2+query3, function(err,result){
+        con.query(query1+query2+query3, function(err,result){                   //triple query to get the data
             if(err){
                 throw err;
             }
             res.render("imagePage.ejs",{
                 sessionUsername : req.session.username,
-                data:result
+                data:result                                                     //render the page, it's a 2d json object array which can be accessed via result[i][j].arribute
             })
         })
         
@@ -162,49 +165,45 @@ app.route('/:imageID')
 
 app.route('/like')
     .post(function(req,res){
-        var logged = typeof req.session.username==='undefined';
-        if(logged==false){
-            console.log(logged);
+        var logged = typeof req.session.username==='undefined';             //check if login
+        if(logged==false){                                                  //logged in
             var idusers = req.session.username;
             var idimages = req.body.idimages;
             var query1 = "INSERT INTO likes(idusers, idimages) VALUES ((SELECT idusers FROM users WHERE username='"+idusers+"'),"+idimages+"); ";
             var query2 = "UPDATE images SET likes=likes+1 WHERE idimages="+idimages+";";
-            con.query(query1+query2,function(err){
+            con.query(query1+query2,function(err){                          //double query statement that update the like on both table.
                 if(err){
                     throw err;
                 }
-                res.send("success!");
+                res.send("success!");                                       //send message to ajax
             });
-        } else{
-            res.send("failed");
+        } else{                                                             //not logged in
+            res.send("failed");                                             //send message to ajax
         }
     });
 
 app.route('/comment')
     .post(function(req,res){
-        if(typeof req.session.username!=='undefined'){  
-            var idimages=req.body.idimages;
-            var comment = req.body.data;
-            var username=req.session.username;
-            var query = "INSERT INTO comments(comment, idimages,idusers) VALUES ('"+comment+"',"+idimages+",(SELECT idusers FROM users WHERE username='"+username+"'));"
+        if(typeof req.session.username!=='undefined'){                      //check if login
+            var idimages=req.body.idimages;                                 //get image id
+            var comment = req.body.data;                                    //get user comment
+            var username=req.session.username;                              //get current login user
+            var time = getTime();                                           //get time
+            var query = 'INSERT INTO comments(comment, idimages,idusers,date) VALUES ("'+comment+'",'+idimages+',(SELECT idusers FROM users WHERE username="'+username+'"),"'+time+'");'
             con.query(query,function(err){
                 if(err){
                     throw err;
                 }
-                res.send({"username":username,"comment":comment});
+                res.send({"username":username,"comment":comment,"date":time});          //send data to update
             });
-        }else{
-            res.send("failed");
+        }else{                                                              //nog login
+            res.send("failed");                                             //send message to ajax
         }
     });
 
-app.route('/getComment')
-    .post(function(req,res){
-      
-    });
 
 
-function getTime(){
+function getTime(){                                                                 //get current server/website time
     var year = new Date().getFullYear();
     var month = new Date().getMonth()+1;
     var day = new Date().getDate();
@@ -215,7 +214,7 @@ function getTime(){
     return time;
 }
 
-function timeToString(data){
+function timeToString(data){                                                        //convert time to string
     if(data<10){
         data="0"+data.toString();
     } else{
@@ -224,12 +223,12 @@ function timeToString(data){
     return data
 }
 
-function checkAlphaNumeric(data){
+function checkAlphaNumeric(data){                                                   //check if string contains special character
     for(var i=0; i<data.length;i++){
         var temp = data.charCodeAt(i);
-        if (!(temp > 47 && temp < 58) &&        // numeric (0-9)
-            !(temp > 64 && temp < 91) &&        // upper alpha (A-Z)
-            !(temp > 96 && temp < 123))         // lower alpha (a-z)
+        if (!(temp > 47 && temp < 58) &&                                            // numeric (0-9)
+            !(temp > 64 && temp < 91) &&                                            // upper alpha (A-Z)
+            !(temp > 96 && temp < 123))                                             // lower alpha (a-z)
         {       
             return false;
         }
