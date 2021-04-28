@@ -36,22 +36,27 @@ app.set("view_engine","ejs");
 app.set("views","view");
 app.listen(port);
 console.log("App running on http://localhost:"+port);
-
+var previousRoute='/';
 /*route handling method */
-app.route("/").get(function(req,res){
-    con.query('SELECT src, date, likes, username FROM images JOIN users WHERE users.idusers=images.idusers;',function(err, result){
-        if(err){
-            throw err;
-        }
-        res.render('index.ejs',{
-            sessionUsername: req.session.username,
-            images: result
-        });
-    });    
+app.route("/")
+    .get(function(req,res){
+        con.query('SELECT idimages,src, date, likes, username FROM images JOIN users WHERE users.idusers=images.idusers;',function(err, result){
+            if(err){
+                throw err;
+            }
+            res.render('index.ejs',{
+                sessionUsername: req.session.username,
+                images: result
+            });
+        });    
     });
   
 app.route('/login')
     .get(function(req,res){
+        console.log(req.headers.referer);
+        if(req.headers.referer!='http://localhost:8000/login'&&previousRoute!='/upload'){
+            previousRoute=req.headers.referer;
+        }
         res.render('login.ejs',{sessionUsername: req.session.username});
     })
     .post(function(req,res){
@@ -62,7 +67,7 @@ app.route('/login')
             }
             if(result.length>0){
                 req.session.username = req.body.loginusername;
-                res.redirect('/upload');
+                res.redirect(previousRoute);
             }
             else{
                 req.flash("errorLogin","Please enter valid username/password.");
@@ -85,7 +90,6 @@ app.route('/signup')
                 if(err){
                     if(err.errno==1062){
                         req.flash("errorSignup","Username already exisit.");
-                        console.log("error, flashed!");
                         res.redirect('/login');
                     }else{
                         throw err;
@@ -108,6 +112,7 @@ app.route('/upload')
         if(req.session.username){
             res.render('upload.ejs',{"sessionUsername":req.session.username});
         } else{
+            previousRoute=req.url;
             res.redirect('/login');
         }
     })
@@ -119,7 +124,7 @@ app.route('/upload')
             var time = getTime();
             async.forEach(imageData, function(data){
                 var buffer = Buffer.from(data.replace(/^data:image\/\w+;base64,/,""),'base64');
-                fs.writeFileSync('static/uploads/'+imageName[imageData.indexOf(data)],buffer);
+                fs.writeFileSync('uploads/'+imageName[imageData.indexOf(data)],buffer);
                 var mysql = "INSERT INTO images(src, date, likes, idusers) VALUES ('"+data+"', '"+time+"', 0, (select idusers from users where username='"+req.session.username+"'))";
                 con.query(mysql,function(err){
                     if(err){
@@ -136,17 +141,64 @@ app.route('/upload')
         }
     });
 
+app.route('/:imageID')
+    .get(function(req,res){
+        req.session.imageID=req.params['imageID'];
+        var imageID = req.session.imageID;
+        var query1 = "SELECT src, date, likes, username, idimages, users.idusers FROM users JOIN images ON users.idusers=images.idusers WHERE images.idimages="+imageID+"; ";
+        var query2 = "SELECT comment, username FROM comments JOIN users ON users.idusers = comments.idusers WHERE idimages="+imageID+";";
+        var query3 = "SELECT likes.idusers FROM likes JOIN users ON likes.idusers=users.idusers WHERE idimages="+imageID+" AND username='"+req.session.username+"';";
+        con.query(query1+query2+query3, function(err,result){
+            if(err){
+                throw err;
+            }
+            res.render("imagePage.ejs",{
+                sessionUsername : req.session.username,
+                data:result
+            })
+        })
+        
+    });
+
 app.route('/like')
     .post(function(req,res){
-
+        var logged = typeof req.session.username==='undefined';
+        if(logged==false){
+            console.log(logged);
+            var idusers = req.session.username;
+            var idimages = req.body.idimages;
+            var query1 = "INSERT INTO likes(idusers, idimages) VALUES ((SELECT idusers FROM users WHERE username='"+idusers+"'),"+idimages+"); ";
+            var query2 = "UPDATE images SET likes=likes+1 WHERE idimages="+idimages+";";
+            con.query(query1+query2,function(err){
+                if(err){
+                    throw err;
+                }
+                res.send("success!");
+            });
+        } else{
+            res.send("failed");
+        }
     });
 
 app.route('/comment')
     .post(function(req,res){
-
+        if(typeof req.session.username!=='undefined'){  
+            var idimages=req.body.idimages;
+            var comment = req.body.data;
+            var username=req.session.username;
+            var query = "INSERT INTO comments(comment, idimages,idusers) VALUES ('"+comment+"',"+idimages+",(SELECT idusers FROM users WHERE username='"+username+"'));"
+            con.query(query,function(err){
+                if(err){
+                    throw err;
+                }
+                res.send({"username":username,"comment":comment});
+            });
+        }else{
+            res.send("failed");
+        }
     });
 
-app.route('/getImages')
+app.route('/getComment')
     .post(function(req,res){
       
     });
@@ -160,7 +212,6 @@ function getTime(){
     var mins = new Date().getMinutes();
     var second = new Date().getSeconds();
     var time = timeToString(year)+"-"+timeToString(month)+'-'+timeToString(day)+' '+timeToString(hour)+':'+timeToString(mins)+':'+timeToString(second);
-    console.log(time);
     return time;
 }
 
