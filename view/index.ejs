@@ -16,10 +16,8 @@
 <body >
     <!-- NAVIGATION BAR START -->
     <%- include("nav") %>
-        <!-- NAVIGATION BAR END-->
-        <!-- IMAGE CAROUSEL START-->
-    <!-- IMAGE CAROUSEL END-->
-    <!-- OPENING PARAGRAPH-->
+    <!-- NAVIGATION BAR END-->
+    <!-- DISPLAY IMAGES START-->
     <div class="container">
             <%for (var i=0; i < images.length ; i++) { %>
                 <%if(i==0||i%3==0){%>
@@ -28,7 +26,7 @@
                     <div class="col-4">
                         <div>Published by: <%= images[i].username %></div>
                         <div>Picture Date: <%= images[i].date %></div>
-                        <form action="/<%=images[i].idimages%>" id="<%=images[i].idimages%>" method="get">
+                        <form action="/getImages/<%=images[i].idimages%>" id="<%=images[i].idimages%>" method="get">
                             <button class="btn" type="submit">
                                 <img src="<%= images[i].src %>" style="width:150px" id="<%=images[i].idimages%>"><br>
                             </button>
@@ -39,7 +37,7 @@
                 <%}%>
             <% } %>
     </div>
-    <!--LIST OF EVENT START-->
+    <!--LIST OF IMAGES END-->
 </body>
 
 </html>

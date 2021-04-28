@@ -105,7 +105,44 @@
 }
 
 
+.date {
+    font-size: 14px
+}
 
+.comment-text {
+    font-size: 16px
+}
+
+.fs-12 {
+    font-size: 16px
+}
+
+.shadow-none {
+    box-shadow: none
+}
+
+.name {
+    color: #007bff
+}
+
+.second {
+    width: 100%;
+    color:white;
+    background-color: #0071BD;
+    border-radius: 4px;
+    box-shadow: 10px 10px 5px #aaaaaa
+}
+.cursor:hover {
+    color: blue
+}
+
+.cursor {
+    cursor: pointer
+}
+
+.textarea {
+    resize: none
+}
 
 
 /*profile style*/
