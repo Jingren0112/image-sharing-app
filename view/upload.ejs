@@ -20,7 +20,7 @@
         <!-- NAVIGATION BAR START -->
         <%- include("nav", {active: "Home" }) %>
         <!-- NAVIGATION BAR END-->
-        <!-- PROFILE START -->
+        <!-- UPLOAD START -->
 
             
         <div class="container">
@@ -28,36 +28,42 @@
             <h1 class="justify-content-center profileTitle mr-3"> Upload </h1><br>
             <div class="row justify-content-center mr-3">
                     <div id="messages">
-                    <%if(messages.successUpload){%>
-                        <div class="alert alert-success">
-                            <%=messages.successUpload%>
-                        </div>
-                    <%}else if(messages.failUpload){%>
-                        <div class="alert alert-danger">
-                            <%=messages.failUpload%>
-                        </div>
-                    <%}%>
-                    </div>
-                    <form id="uploads" enctype="multipart/form-data">     
-                        <div class="image-upload">
-                            <label class="uploadButton" for="upload">
-                                upload your image
-                            </label>
-                            <input id="upload" type="file" name="uploadImage" accept="image/png,image/jpeg" multiple onchange="imageUpload(event);">
-                            <div id="preview">
-
+                        <%if(messages.successUpload){%>
+                            <div class="alert alert-success">
+                                <%=messages.successUpload%>
                             </div>
-                        </div>
-                        <input type="button" value="upload" onclick="send()">
-                    </form>
-                    <%if(messages.errorNoFile){%>
-                    <div class="alert alert-danger">
-                        <%=messages.errorNoFile%>
+                        <%}else if(messages.faildUpload){%>
+                            <div class="alert alert-danger">
+                                <%=messages.faildUpload%>
+                            </div>
+                        <%}%>
                     </div>
-                    <% } %>
+                    <div class="row"id="errorMessage">
+
+                    </div>
+            </div>
+            <div class="row justify-content-center mr-3">
+                <form id="uploads" enctype="multipart/form-data">     
+                    <div class="image-upload">
+                        <br><label class="uploadButton" for="upload">
+                            upload your image
+                        </label>
+                        <input id="upload" type="file" name="uploadImage" accept="image/png,image/jpeg" multiple onchange="imageUpload(event);">
+                        <div id="preview">
+
+                        </div>
+                    </div>
+                    <input type="button" value="upload" onclick="send()">
+                </form>
+            </div>
+            <%if(messages.errorNoFile){%>
+            <div class="alert alert-danger">
+                <%=messages.errorNoFile%>
+            </div>
+            <% } %>
             </div>
            
-        <!-- PROFILE END -->
+        <!-- UPLOAD END -->
     </body>
 
 </html>
