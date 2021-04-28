@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="css/stylesheet.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="JavaScript/script.js" defer ></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-iBBXm8fW90+nuLcSKlbmrPcLa0OT92xO1BIsZ+ywDWZCvqsWgccV3gFoRBv0z+8dLJgyAHIhR35VZc2oM/gI1w==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>3rd space sharing</title>
+</head>
+
+<body >
+    <!-- NAVIGATION BAR START -->
+    <%- include("nav") %>
+        <!-- NAVIGATION BAR END-->
+        <!-- IMAGE CAROUSEL START-->
+    <!-- IMAGE CAROUSEL END-->
+    <!-- OPENING PARAGRAPH-->
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div id="<%=data[0][0].idusers%>" class="uploadUser">Published by: <%= data[0][0].username %></div>
+        </div>
+        <div class="row justify-content-center">
+            <div id="date">Picture Date: <%= data[0][0].date %></div>
+        </div>
+        <div class="row justify-content-center">
+            <img id="<%=data[0][0].idimages%>" class="image" src="<%= data[0][0].src %>" >
+        </div>
+        <div class="row justify-content-center">
+            <%if(data[2]!=""){%>
+                <button class="btn bgColor" disabled>
+            <%}else{%>
+                <button class="btn bgColor" id="likebtn" onclick="like()">
+            <%}%>
+                    <span id="icon"><i class="fa fa-thumbs-up"></i></span>
+                    <span id="count"><%=data[0][0].likes%></span>
+                </button>
+        </div><br>
+        <div class="row justify-content-center">
+                <p>Please enter your comment below</p><br>
+        </div>
+        <div class="row justify-content-center">
+                <textarea id="commentInput" name="commentInput" rows="4" cols="50" style="resize: none;"></textarea>
+        </div><br>
+        <div class="row justify-content-center">
+            <button class="btn bgColor" onclick="comment()">
+                    submit
+            </button>
+        </div>
+        <div class="row justify-content-center" id="commentSection">
+            <div>
+                Comment area:
+            </div><br>
+        </div>
+        <div class="container" id="commentArea">
+            <%if(data[1]!=""){%>
+                <%for(var i=0; i<data[1].length;i++){%>
+                    <div class="row justify-content-center">
+                        <p id="comment">Comment: <%=data[1][i].comment%></p>
+                    </div>
+                    <div class="row justify-content-center">
+                        <p id="commentUser">From: <%=data[1][i].username%></p>
+                    </div>
+                <%}%>
+            <%}else{%>
+                <div class="row justify-content-center" id="nocomment">
+                    <p>no comment yet</p>
+                </div>
+            <%}%>
+        </div>
+    </div>
+    <!--LIST OF EVENT START-->
+</body>
+
+</html>
