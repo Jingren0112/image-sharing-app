@@ -39,7 +39,7 @@ console.log("App running on http://localhost:"+port);
 
 var previousRoute='/';          //Global variable to check previous route for login route
 
-/*route handling method */
+/*route handling for homepage */
 app.route("/")
     .get(function(req,res){
         con.query('SELECT idimages,src, date, likes, username FROM images JOIN users WHERE users.idusers=images.idusers;',function(err, result){
@@ -52,7 +52,8 @@ app.route("/")
             });
         });    
     });
-  
+
+/*login route */
 app.route('/login')
     .get(function(req,res){                             //display login page along with signup
         if(req.headers.referer!='http://localhost:8000/login'&&previousRoute!='/upload'){               //check if previous route is login, if not then update it. Upload need an extra exception
@@ -77,13 +78,14 @@ app.route('/login')
         });
     });
 
-
+/*logout route */
 app.route('/logout')
     .get(function(req,res){
         req.session.destroy();                                  //destory session to revoke login
         res.redirect('/');                                      //send back to homepage
     });
 
+    /*handle signup route */
 app.route('/signup')
     .post(function(req,res){
         if(checkAlphaNumeric(req.body.signupusername)){                         //check if username contain special character to prevent sql injection. (ATTACK!)
@@ -107,8 +109,9 @@ app.route('/signup')
         
     });
 
-
+/*upload route */
 app.route('/upload')
+    /*get to render the page */
     .get(function(req,res){                                                         //display login page
         if(req.session.username){                                                   //if logged in
             res.render('upload.ejs',{"sessionUsername":req.session.username});      //render upload page
@@ -117,6 +120,9 @@ app.route('/upload')
             res.redirect('/login');                                                 //redirect to login page
         }
     })
+
+
+    /*post from ajax to handle upload */
     .post(function(req,res){                                                        //handle upload request from ajax.
         var image = req.body;                                                       //get info from ajax
         if(image.data!='[]'){                                                       //check data is not empty
@@ -145,6 +151,7 @@ app.route('/upload')
         }
     });
 
+/*handle individual image route. Added getImages to avoid loading this while homepage is loaded */
 app.route('/getImages/:imageID')                                                    //route for individual image. It was /:imageID but this will cause the homepage to load along with this being execute. That's why it's being changed to this route.
     .get(function(req,res){
         var imageID = req.params['imageID'];                  //get imageID from the url
@@ -163,6 +170,7 @@ app.route('/getImages/:imageID')                                                
         
     });
 
+    /*handle like route */
 app.route('/like')
     .post(function(req,res){
         var logged = typeof req.session.username==='undefined';             //check if login
@@ -182,6 +190,8 @@ app.route('/like')
         }
     });
 
+
+    /*handle post comment route*/
 app.route('/comment')
     .post(function(req,res){
         if(typeof req.session.username!=='undefined'){                      //check if login
@@ -202,8 +212,8 @@ app.route('/comment')
     });
 
 
-
-function getTime(){                                                                 //get current server/website time
+/*get current server/website time*/
+function getTime(){                                                                 
     var year = new Date().getFullYear();
     var month = new Date().getMonth()+1;
     var day = new Date().getDate();
@@ -214,7 +224,8 @@ function getTime(){                                                             
     return time;
 }
 
-function timeToString(data){                                                        //convert time to string
+/*convert time to string*/
+function timeToString(data){                                                      
     if(data<10){
         data="0"+data.toString();
     } else{
@@ -223,7 +234,8 @@ function timeToString(data){                                                    
     return data
 }
 
-function checkAlphaNumeric(data){                                                   //check if string contains special character
+ //check if string contains special character*/
+function checkAlphaNumeric(data){                                                  
     for(var i=0; i<data.length;i++){
         var temp = data.charCodeAt(i);
         if (!(temp > 47 && temp < 58) &&                                            // numeric (0-9)

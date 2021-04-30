@@ -35,6 +35,7 @@ function imageUpload(e){                                        //preview image 
  
 }
 
+/*like button clicked */
 function like(){
     var idimages = document.getElementsByClassName("image")[0].id;              //use tag's id as the image id which can be used to search databse
     var dataToTransfer = {"idimages":idimages};                                 //set data to transfer to server.
@@ -53,7 +54,8 @@ function like(){
     });
 }
 
-function comment(){                                                                 //upload comment to server
+/*comment posted */
+function comment(){                                                                 
     var data=document.getElementById("commentInput");                               //get comment data
     var idimages = document.getElementsByClassName("image")[0].id;                  //get image id
     var dataToTransfer={"data":data.value,"idimages":idimages};                     //create data to be transfer in json type
@@ -98,8 +100,8 @@ function comment(){                                                             
     });
 }
 
-
-function send(){                            //upload image to server
+/*submit button clicked from upload */
+function send(){                            
     var data ={"data": JSON.stringify(dataTrans),"imageName":JSON.stringify(imageName)};       //use stringfy to compress all data into a single json object fo transfer
     $.ajax({
         url:"/upload",
@@ -110,8 +112,8 @@ function send(){                            //upload image to server
     });
 }
 
-
-function setReader(file){                                           //file reader function to read the image as data url
+/*read image to dataurl */
+function setReader(file){                                           
     const reader = new FileReader();
     reader.onload=function(){
         dataTrans[j]=reader.result;
@@ -120,8 +122,8 @@ function setReader(file){                                           //file reade
     reader.readAsDataURL(file);
 }
 
-
-function deleteIMG(btnID){                                          //delete unwanted image
+/*delete unwanted image */
+function deleteIMG(btnID){                                          
     var image = document.getElementsByClassName(btnID)[0];
     var button = document.getElementById(btnID);
     image.remove();
@@ -131,6 +133,7 @@ function deleteIMG(btnID){                                          //delete unw
 
 }
 
+/*global variable */
 var imageName = [];                 //user uploaded image name array
 var data=[];                        //user uploaded image data array
 var dataTrans=[];                   //user uploaded image data in url form array

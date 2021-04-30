@@ -19,23 +19,23 @@
     <!-- NAVIGATION BAR END-->
     <!-- DISPLAY IMAGES START-->
     <div class="container">
-            <%for (var i=0; i < images.length ; i++) { %>
-                <%if(i==0||i%3==0){%>
-                    <div class="row">
-                <%}%>
-                    <div class="col-4">
-                        <div>Published by: <%= images[i].username %></div>
-                        <div>Picture Date: <%= images[i].date %></div>
-                        <form action="/getImages/<%=images[i].idimages%>" id="<%=images[i].idimages%>" method="get">
-                            <button class="btn" type="submit">
-                                <img src="<%= images[i].src %>" style="width:150px" id="<%=images[i].idimages%>"><br>
-                            </button>
-                        </form>
-                    </div>
-                <%if(i%3==2){%>
-                    </div><br>
-                <%}%>
-            <% } %>
+        <%for (var i=0; i < images.length ; i++) { %>
+            <%if(i==0||i%3==0){%>
+                <div class="row">
+            <%}%>
+                <div class="col-4">
+                    <div>Published by: <%= images[i].username %></div>
+                    <div>Picture Date: <%= images[i].date %></div>
+                    <form action="/getImages/<%=images[i].idimages%>" id="<%=images[i].idimages%>" method="get">    <!-- ADD ACTION FOR IMAGE TO LINK WITH INDIVIDUAL PAGE -->
+                        <button class="btn" type="submit">
+                            <img src="<%= images[i].src %>" style="width:150px" id="<%=images[i].idimages%>"><br>
+                        </button>
+                    </form>
+                </div>
+            <%if(i%3==2){%>
+                </div><br>
+            <%}%>
+        <% } %>
     </div>
     <!--LIST OF IMAGES END-->
 </body>

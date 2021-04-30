@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
     <head>
         <meta charset="UTF-8">
         <link href="css/stylesheet.css" rel="stylesheet">
@@ -18,29 +17,26 @@
 
     <body >
         <!-- NAVIGATION BAR START -->
-        <%- include("nav", {active: "Home" }) %>
+        <%- include("nav") %>
         <!-- NAVIGATION BAR END-->
-        <!-- UPLOAD START -->
-
-            
-        <div class="container">
-            
+        <!-- UPLOAD START --> 
+        <div class="container">  
             <h1 class="justify-content-center profileTitle mr-3"> Upload </h1><br>
             <div class="row justify-content-center mr-3">
-                    <div id="messages">
-                        <%if(messages.successUpload){%>
-                            <div class="alert alert-success">
-                                <%=messages.successUpload%>
-                            </div>
-                        <%}else if(messages.faildUpload){%>
-                            <div class="alert alert-danger">
-                                <%=messages.faildUpload%>
-                            </div>
-                        <%}%>
-                    </div>
-                    <div class="row"id="errorMessage">
+                <div id="messages">
+                    <%if(messages.successUpload){%>
+                        <div class="alert alert-success">
+                            <%=messages.successUpload%>
+                        </div>
+                    <%}else if(messages.faildUpload){%>
+                        <div class="alert alert-danger">
+                            <%=messages.faildUpload%>
+                        </div>
+                    <%}%>
+                </div>
+                <div class="row"id="errorMessage">
 
-                    </div>
+                </div>
             </div>
             <div class="row justify-content-center mr-3">
                 <form id="uploads" enctype="multipart/form-data">     
@@ -49,7 +45,7 @@
                             upload your image
                         </label>
                         <input id="upload" type="file" name="uploadImage" accept="image/png,image/jpeg" multiple onchange="imageUpload(event);">
-                        <div id="preview">
+                        <div id="preview">  <!-- PREVIEW IMAGE -->
 
                         </div>
                     </div>
@@ -62,7 +58,6 @@
             </div>
             <% } %>
             </div>
-           
         <!-- UPLOAD END -->
     </body>
 
