@@ -185,7 +185,8 @@ app.route('/like')
                 }
                 res.send("success!");                                       //send message to ajax
             });
-        } else{                                                             //not logged in
+        } else{
+            previousRoute="/getImages/"+idimages+"?"                                                             //not logged in save the previous path because windows.location won't set header
             res.send("failed");                                             //send message to ajax
         }
     });
@@ -206,7 +207,8 @@ app.route('/comment')
                 }
                 res.send({"username":username,"comment":comment,"date":time});          //send data to update
             });
-        }else{                                                              //nog login
+        }else{              
+            previousRoute="/getImages/"+idimages+"?"                         //not login incase of session being destroied, log the previous path
             res.send("failed");                                             //send message to ajax
         }
     });
